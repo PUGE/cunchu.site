@@ -1,28 +1,50 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="app">
+    <router-view/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
-export default {
-  name: 'app',
-  components: {
-    HelloWorld
+  import localforage from 'localforage'
+  export default {
+    name: 'App',
+    created () {
+      localforage.getItem('config', (err, value) => {
+        if (err) alert(err)
+        else {
+          // 如果有保存的密钥那么直接进入管理界面
+          console.log(`读取到密钥${value}`)
+          this.$router.push(`/manage`)
+        }
+      })
+    }
   }
-}
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style lang="less">
+  html, body, .app, .box {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    font-family: "Microsoft YaHei", "Arial", "黑体", "宋体", sans-serif;
+    font-size: 14px;
+    overflow: hidden;
+  }
+  body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td {
+    margin: 0;
+    padding: 0;
+  }
+  img {
+    border: 0;
+    vertical-align: top;
+    user-select: none;
+  }
+  a {
+    text-decoration: none;
+    color: #666;
+    -webkit-user-drag: none;
+  }
+  a:hover {
+    text-decoration: none;
+  }
 </style>
