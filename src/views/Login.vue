@@ -32,14 +32,18 @@
           secretKey
         }
         const authorization = generateAccessToken(mac, 'http://rs.qbox.me/buckets')
-        get(`http://127.0.0.1:3000/buckets?Authorization=${authorization}`, (data) => {
+        get(`http://127.0.0.1:3000/getBucketsList?Authorization=${authorization}`, (data) => {
+          console.log('获取到密钥数据:', data)
           if (data.error) {
             alert(data.error)
           } else {
             const config = { accessKey, secretKey }
             localforage.setItem('config', config,  (err) => {
               if (err) alert(err)
-              else console.log('密钥输入成功！')
+              else {
+                this.$router.push(`/manage`)
+                console.log('密钥输入成功！')
+              }
             })
           }
         })

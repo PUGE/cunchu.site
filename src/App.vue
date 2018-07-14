@@ -12,6 +12,8 @@
       localforage.getItem('config', (err, value) => {
         if (err) alert(err)
         else {
+          // 如果没有获取到密钥 不进行跳转
+          if (!value) return
           // 如果有保存的密钥那么直接进入管理界面
           console.log(`读取到密钥${value}`)
           this.$router.push(`/manage`)

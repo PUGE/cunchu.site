@@ -1,7 +1,7 @@
 <template lang="pug">
   .manage-left-bar
     .logo
-    .bucket(v-for="item in bucketList") {{item}}
+    .bucket(v-for="item in bucketList", @click="") {{item}}
 </template>
 
 <script>
@@ -14,9 +14,9 @@
         if (err) alert(err)
         else {
           // 如果有保存的密钥那么直接进入管理界面
-          console.log(`读取到密钥${mac}`)
-          const authorization = generateAccessToken(JSON.parse(mac), 'http://rs.qbox.me/buckets')
-          get(`http://127.0.0.1:3000/buckets?Authorization=${authorization}`, (bucketData) => {
+          console.log(`读取到密钥`, mac)
+          const authorization = generateAccessToken(mac, 'http://rs.qbox.me/buckets')
+          get(`http://127.0.0.1:3000/getBucketsList?Authorization=${authorization}`, (bucketData) => {
             if (bucketData.error) {
               alert(bucketData.error)
             } else {
@@ -29,6 +29,11 @@
     data () {
       return {
         bucketList: []
+      }
+    },
+    methods: {
+      getBucketResource () {
+        
       }
     }
   }
