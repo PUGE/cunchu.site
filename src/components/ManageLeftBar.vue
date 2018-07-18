@@ -38,9 +38,9 @@
           else {
             // 如果有保存的密钥那么直接进入管理界面
             console.log(`读取到密钥`, mac)
-            const path = `/list?bucket=${bucket}`
+            const path = `/list?bucket=${bucket}&delimiter=/`
             const authorization = generateAccessToken(mac, 'http://rsf.qbox.me' + path)
-            get(`http://127.0.0.1:3000/resourceList?Authorization=${authorization}&path=${path}`, (bucketData) => {
+            get(`http://127.0.0.1:3000/resourceList?Authorization=${authorization}&path=${encodeURIComponent(path)}`, (bucketData) => {
               if (bucketData.error) {
                 alert(bucketData.error)
               } else {
