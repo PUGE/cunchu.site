@@ -41,6 +41,21 @@
     vertical-align: top;
     user-select: none;
   }
+  @font-face {
+    font-family: 'puge';  /* project id 760995 */
+    src: url('//at.alicdn.com/t/font_760995_ednzifkexq.eot');
+    src: url('//at.alicdn.com/t/font_760995_ednzifkexq.eot?#iefix') format('embedded-opentype'),
+    url('//at.alicdn.com/t/font_760995_ednzifkexq.woff') format('woff'),
+    url('//at.alicdn.com/t/font_760995_ednzifkexq.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_760995_ednzifkexq.svg#puge') format('svg');
+  }
+  .icon {
+    font-family: "puge";
+    font-style: normal;
+    font-weight: normal;
+    display: inline-block;
+    user-select: none;
+  }
   a {
     text-decoration: none;
     color: #666;
