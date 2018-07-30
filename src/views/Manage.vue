@@ -28,4 +28,7 @@
   .manage-box {
     display: flex;
   }
+  .right {
+    margin: 10px;
+  }
 </style>
