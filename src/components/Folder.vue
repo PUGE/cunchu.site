@@ -1,6 +1,6 @@
 <template lang="pug">
   .file
-    img.icon(src="@/assets/icon/file_html.svg")
+    img.icon(src="@/assets/icon/folder.svg")
     .name {{name}}
 </template>
 
