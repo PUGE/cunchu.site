@@ -1732,9 +1732,9 @@ chardet@^0.4.0:
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.4.2.tgz#b5473b33dc97c424e5d98dc87d55d4d8a29c8bf2"
 
-check-puge@1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/check-puge/-/check-puge-1.1.2.tgz#6c6e9e3cd32e6cb8a3a7781aa7feac2de313b7cb"
+check-puge@1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/check-puge/-/check-puge-1.1.4.tgz#bfdfc2bc633eca80da81bc2afdbd5278951c4e4b"
 
 check-types@^7.3.0:
   version "7.4.0"
