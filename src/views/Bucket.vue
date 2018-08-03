@@ -13,7 +13,7 @@
         .check
           CheckBox.check-box(:value="isCheckAll", :size="12")
         .name {{item.key}}
-        .file {{item.fsize / 1000}} KB
+        .file {{getFileSize(item.fsize)}}
         .type {{item.mimeType}}
         .time {{new Date(item.putTime / 10000).toLocaleString()}}
         .tool 操作
@@ -57,6 +57,15 @@
             })
           }
         })
+      },
+      getFileSize (size) {
+        if (size <= 1048576) {
+          return (size / 1024).toFixed(2) + 'kb'
+        } else if (size <= 1073741824) {
+          return (size / 1048576).toFixed(2) + 'mb'
+        } else {
+          return (size / 1073741824).toFixed(2) + 'gb'
+        }
       }
     },
     watch: {
