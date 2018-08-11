@@ -17,10 +17,12 @@
           console.log(`读取到密钥`, mac)
           const authorization = generateAccessToken(mac, 'http://rs.qbox.me/buckets')
           get(`http://127.0.0.1:3000/getBucketsList?Authorization=${authorization}`, (bucketData) => {
+            console.log('获取到bucketData:', bucketData)
             if (bucketData.error) {
               alert(bucketData.error)
             } else {
               this.bucketList = bucketData
+              this.$router.push(`/manage/bucket/${bucketData[0]}`)
             }
           })
         }
