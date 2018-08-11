@@ -16,13 +16,14 @@
         .file.item.table-panel-bar-item {{getFileSize(item.fsize)}}
         .type.item.table-panel-bar-item {{item.mimeType}}
         .time.item.table-panel-bar-item {{new Date(item.putTime / 10000).toLocaleString()}}
-        .tool.item.table-panel-bar-item 操作
+        .tool.item.table-panel-bar-item
+          .tool-item(@click="deleteItem(item)") 删除
 </template>
 
 <script>
   import CheckBox from 'check-puge'
   import localforage from 'localforage'
-  import { get, generateAccessToken } from '../sdk/index.js'
+  import { get, generateAccessToken, encodedEntryURI } from '../sdk/index.js'
   export default {
     name: 'bucket',
     components: {
@@ -66,6 +67,22 @@
         } else {
           return (size / 1073741824).toFixed(2) + 'gb'
         }
+      },
+      deleteItem (item) {
+        console.log()
+        localforage.getItem('config', (err, mac) => {
+          console.log(encodedEntryURI('qiniuphotos:gogopher.jpg'))
+          if (err) alert(err)
+          else {
+            // 如果有保存的密钥那么直接进入管理界面
+            console.log(`读取到密钥`, mac)
+            const path = `/delete/${encodedEntryURI(`${this.$route.params.id}:${item.key}`)}`
+            const authorization = generateAccessToken(mac, 'http://rs.qiniu.com' + path)
+            get(`http://127.0.0.1:3000/delete?Authorization=${authorization}&path=${encodeURIComponent(path)}`, (bucketData) => {
+              console.log(bucketData)
+            })
+          }
+        })
       }
     },
     watch: {
@@ -102,6 +119,7 @@
     }
     .file {
       width: 100px;
+      text-align: right;
     }
     .type {
       width: 200px;
