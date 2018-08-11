@@ -32,6 +32,7 @@
           secretKey
         }
         const authorization = generateAccessToken(mac, 'http://rs.qbox.me/buckets')
+        console.log(authorization)
         get(`http://127.0.0.1:3000/getBucketsList?Authorization=${authorization}`, (data) => {
           console.log('获取到密钥数据:', data)
           if (data.error) {

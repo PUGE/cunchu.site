@@ -1,22 +1,22 @@
 <template lang="pug">
   .bucket-box.box
+    .table-title-bar
+      .check
+        CheckBox.check-box(:value="isCheckAll", :size="12")
+      .name.item 文件路径
+      .file.item 文件大小
+      .type.item 文件类型
+      .time.item 上传时间
+      .tool.item 操作
     .file-box(v-if="fileList")
-      .table-title-bar
-        .check
-          CheckBox.check-box(:value="isCheckAll", :size="12")
-        .name 文件路径
-        .file 文件大小
-        .type 文件类型
-        .time 上传时间
-        .tool 操作
       .table-panel-bar(v-for="item in fileList")
-        .check
+        .check.table-panel-bar-item
           CheckBox.check-box(:value="isCheckAll", :size="12")
-        .name {{item.key}}
-        .file {{getFileSize(item.fsize)}}
-        .type {{item.mimeType}}
-        .time {{new Date(item.putTime / 10000).toLocaleString()}}
-        .tool 操作
+        .name.item.table-panel-bar-item {{item.key}}
+        .file.item.table-panel-bar-item {{getFileSize(item.fsize)}}
+        .type.item.table-panel-bar-item {{item.mimeType}}
+        .time.item.table-panel-bar-item {{new Date(item.putTime / 10000).toLocaleString()}}
+        .tool.item.table-panel-bar-item 操作
 </template>
 
 <script>
@@ -79,7 +79,7 @@
 <style lang="less">
   .file-box {
     width: 100%;
-    height: 100%;
+    height: calc(100% - 50px);
     overflow: auto;
   }
   .table-title-bar {
@@ -94,22 +94,30 @@
     height: 30px;
     line-height: 30px;
     .check {
-      width: 60px;
+      width: 30px;
+      border-left: 1px solid #ccc;
     }
     .name {
-      width: calc(~"100% - 1060px");
+      width: calc(~"100% - 660px");
     }
     .file {
-      width: 200px;
+      width: 100px;
     }
     .type {
-      width: 400px;
+      width: 200px;
     }
     .time {
       width: 200px;
     }
     .tool {
-      width: 200px;
+      width: 100px;
+      border-right: 1px solid #ccc;
+    }
+    .table-panel-bar-item {
+      border-right: 1px solid #ccc;
+    }
+    .item {
+      padding: 0 10px;
     }
   }
   table {
