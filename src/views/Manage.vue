@@ -30,5 +30,6 @@
   }
   .right {
     margin: 10px;
+    height: calc(100% - 20px);
   }
 </style>

@@ -1,5 +1,7 @@
 <template lang="pug">
   .bucket-box.box
+    .top-bar
+      .delete-multiple.top-bar-item(@click="multipleDelete") 删除
     .table-title-bar
       .check
         CheckBox.check-box(:value="isCheckAll", :size="12")
@@ -11,7 +13,7 @@
     .file-box(v-if="fileList")
       .table-panel-bar(v-for="item in fileList")
         .check.table-panel-bar-item
-          CheckBox.check-box(:value="isCheckAll", :size="12")
+          CheckBox.check-box(v-model="item.isCheck", :size="12")
         .name.item.table-panel-bar-item {{item.key}}
         .file.item.table-panel-bar-item {{getFileSize(item.fsize)}}
         .type.item.table-panel-bar-item {{item.mimeType}}
@@ -24,6 +26,7 @@
   import CheckBox from 'check-puge'
   import localforage from 'localforage'
   import { get, generateAccessToken, encodedEntryURI } from '../sdk/index.js'
+  const axios = require('axios')
   export default {
     name: 'bucket',
     components: {
@@ -32,30 +35,31 @@
     data () {
       return {
         isCheckAll: false,
-        fileList: null
+        fileList: null,
+        mac: null
       }
     },
     created () {
-      this.getBucket()
+      localforage.getItem('config', (err, mac) => {
+        if (err) alert(err)
+        else {
+          console.log(`读取到密钥`, mac)
+          this.mac = mac
+          this.getBucket()
+        }
+      })
     },
     methods: {
       getBucket () {
         this.fileList = null
-        localforage.getItem('config', (err, mac) => {
-          if (err) alert(err)
-          else {
-            // 如果有保存的密钥那么直接进入管理界面
-            console.log(`读取到密钥`, mac)
-            const path = `/list?bucket=${this.$route.params.id}`
-            const authorization = generateAccessToken(mac, 'http://rsf.qbox.me' + path)
-            get(`http://127.0.0.1:3000/resourceList?Authorization=${authorization}&path=${encodeURIComponent(path)}`, (bucketData) => {
-              if (bucketData.error) {
-                alert(bucketData.error)
-              } else {
-                console.log(bucketData)
-                this.fileList = bucketData.items
-              }
-            })
+        const path = `/list?bucket=${this.$route.params.id}`
+        const authorization = generateAccessToken(this.mac, 'http://rsf.qbox.me' + path)
+        get(`http://127.0.0.1:3000/resourceList?Authorization=${authorization}&path=${encodeURIComponent(path)}`, (bucketData) => {
+          if (bucketData.error) {
+            alert(bucketData.error)
+          } else {
+            console.log(bucketData)
+            this.fileList = bucketData.items
           }
         })
       },
@@ -69,19 +73,25 @@
         }
       },
       deleteItem (item) {
-        console.log()
-        localforage.getItem('config', (err, mac) => {
-          console.log(encodedEntryURI('qiniuphotos:gogopher.jpg'))
-          if (err) alert(err)
-          else {
-            // 如果有保存的密钥那么直接进入管理界面
-            console.log(`读取到密钥`, mac)
-            const path = `/delete/${encodedEntryURI(`${this.$route.params.id}:${item.key}`)}`
-            const authorization = generateAccessToken(mac, 'http://rs.qiniu.com' + path)
-            get(`http://127.0.0.1:3000/delete?Authorization=${authorization}&path=${encodeURIComponent(path)}`, (bucketData) => {
-              console.log(bucketData)
-            })
-          }
+        const path = `/delete/${encodedEntryURI(`${this.$route.params.id}:${item.key}`)}`
+        const authorization = generateAccessToken(this.mac, 'http://rs.qiniu.com' + path)
+        get(`http://127.0.0.1:3000/delete?Authorization=${authorization}&path=${encodeURIComponent(path)}`, () => {
+          this.getBucket()
+        })
+      },
+      // 多选删除
+      multipleDelete () {
+        let tempList = []
+        this.fileList.forEach(element => {
+          if (element.isCheck) tempList.push(`op=/delete/` + encodedEntryURI(`${this.$route.params.id}:${element.key}`))
+        })
+        // console.log(tempList.join('&'))
+        const path = `/batch`
+        const authorization = generateAccessToken(this.mac, 'http://rs.qiniu.com' + path, tempList.join('&'))
+        axios.post(`http://127.0.0.1:3000/batch?Authorization=${authorization}&path=${encodeURIComponent(path)}`, {
+          data: tempList.join('&')
+        }).then((res) => {
+          console.log(res)
         })
       }
     },
@@ -156,5 +166,12 @@
   }
   .check-box {
     margin: 6px;
+  }
+  .top-bar {
+    height: 30px;
+    background-color: skyblue;
+    .top-bar-item {
+      cursor: pointer;
+    }
   }
 </style>
